@@ -1,3 +1,5 @@
 www/vendor
 .idea/
-data/
+www/data/*
+www/tests/_data/*
+www/tests/_output/*
