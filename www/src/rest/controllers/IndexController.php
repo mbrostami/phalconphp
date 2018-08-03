@@ -7,11 +7,9 @@ class IndexController extends Controller
 {
     public function indexAction()
     {
-        $d = $this->dataSource;
-        // @TODO remove this line
-        var_dump($d);
-        die();
-        
-        return [];
+        $pagination = $this->pagination->setIterator($this->dataSource->getIterator());
+        $pagination->setLimit($this->request->get('limit', 'int', $this->config->pagination->limit))
+            ->setPage($this->request->get('page', 'int', 1));
+        return $this->response->setJsonContent($pagination->toArrayCurrentPage());
     }
 }

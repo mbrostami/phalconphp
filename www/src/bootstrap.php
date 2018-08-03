@@ -45,3 +45,4 @@ $di->setShared('dataSource', function () {
     $dataSourceFactory = new DataSourceFactory();
     return $dataSourceFactory->createDataSourceAdapter($adapter, $configs);
 });
+$di->set('pagination', \App\Services\Pagination::class);

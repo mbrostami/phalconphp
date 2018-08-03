@@ -23,4 +23,16 @@ class Csv implements DataTypeInterface
         }
         $this->configs = $configs;
     }
+
+    /**
+     * @return Iterator
+     */
+    public function getIterator()
+    {
+        $this->data = json_decode(file_get_contents($this->configs['path']));
+        if (!is_array($this->data)) {
+            $this->data = []; // FIXME this should throw an exception
+        }
+        return new Iterator($this->data);
+    }
 }

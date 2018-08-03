@@ -5,7 +5,10 @@ return new \Phalcon\Config([
     'dataSource' => [
         'adapter' => DataSourceFactory::TYPE_JSON,
         'configs' => [
-            'path' => APP_PATH . '/data/testtakers.json'
+            'path' => APP_PATH . '/../data/testtakers.json'
         ]
+    ],
+    'pagination' => [
+        'limit' => 10
     ]
 ]);

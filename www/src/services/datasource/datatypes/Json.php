@@ -2,6 +2,7 @@
 namespace App\Services\Datasource\Datatypes;
 
 use App\Services\Datasource\DataTypeInterface;
+use App\Services\Datasource\Iterator;
 
 /**
  * Created by PhpStorm.
@@ -12,6 +13,7 @@ use App\Services\Datasource\DataTypeInterface;
 class Json implements DataTypeInterface
 {
     protected $configs;
+    protected $data;
 
     public function __construct($configs = [])
     {
@@ -22,5 +24,17 @@ class Json implements DataTypeInterface
             throw new \Exception('Json file is not exists');
         }
         $this->configs = $configs;
+    }
+
+    /**
+     * @return Iterator
+     */
+    public function getIterator()
+    {
+        $this->data = json_decode(file_get_contents($this->configs['path']));
+        if (!is_array($this->data)) {
+            $this->data = []; // FIXME this should throw an exception
+        }
+        return new Iterator($this->data);
     }
 }

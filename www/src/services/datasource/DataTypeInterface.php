@@ -10,4 +10,9 @@ namespace App\Services\Datasource;
 interface DataTypeInterface
 {
     public function __construct($configs = []);
+
+    /**
+     * @return Iterator
+     */
+    public function getIterator();
 }

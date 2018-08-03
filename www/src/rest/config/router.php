@@ -8,7 +8,7 @@ class Router extends RouterGroup
     public function initialize()
     {
         $this->setPrefix('/api');
-        $this->addGet('/test', [
+        $this->addGet('/testers', [
             'module' => 'rest',
             'controller' => 'index',
             'action' => 'index'
