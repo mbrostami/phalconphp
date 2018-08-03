@@ -1,11 +1,17 @@
 <?php
 namespace App\Rest\Controllers;
 
-class IndexController
+use Phalcon\Mvc\Controller;
+
+class IndexController extends Controller
 {
     public function indexAction()
     {
-        var_dump('test here');
+        $d = $this->dataSource;
+        // @TODO remove this line
+        var_dump($d);
+        die();
+        
         return [];
     }
 }

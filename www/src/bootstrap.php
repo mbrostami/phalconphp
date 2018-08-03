@@ -1,4 +1,5 @@
 <?php
+use App\Services\Datasource\DataSourceFactory;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Router;
 
@@ -36,4 +37,11 @@ $di->setShared('router', function () use ($di) {
     ]);
     $router->setDefaultNamespace('\App\Web\Controllers');
     return $router;
+});
+
+$di->setShared('dataSource', function () {
+    $adapter = $this->getConfig()->dataSource->adapter;
+    $configs = $this->getConfig()->dataSource->configs->toArray();
+    $dataSourceFactory = new DataSourceFactory();
+    return $dataSourceFactory->createDataSourceAdapter($adapter, $configs);
 });
