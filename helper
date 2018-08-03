@@ -1,0 +1,89 @@
+
+function usage {
+    cat <<EOF
+Usage:
+  $0 [command]
+
+  init [port]                 Initialize application [optional: specify port to listen in your host machine | default: 80]
+  init:container [port]       Recreate container [optional: specify port to listen in your host machine | default: 80]
+  clean                       Remove container
+  clean:all                   Remove image and container
+  composer [command]          Composer command
+  test                        Run unit tests
+  lint                        Run lint tests
+EOF
+    exit 1
+}
+function removeContainerAndImage {
+	docker rmi -f phalconphp:latest
+	removeContainer
+} 
+
+function composer {
+	docker exec -it phalconphp bash -c "composer $*"
+}
+
+function removeContainer {
+	docker rm -f phalconphp
+}
+
+function unitTest {
+	docker exec -it phalconphp bash -c "php vendor/bin/phpunit -vvvv --configuration tests/unit/phpunit.xml tests/unit"
+}
+
+function lint {
+	docker exec -it phalconphp bash -c "php vendor/bin/phpcs -s --cache --colors"
+}
+
+function createContainer {
+	if [ -z "$2" ]
+    then
+      port=80
+    else
+      port=$2
+    fi
+    removeContainer
+    docker run -d --name=phalconphp -v `PWD`/www:/var/www/html -p $port:80 -w /var/www/html phalconphp:latest 
+}
+
+case $1 in
+	"init")
+	    docker build -t phalconphp:latest .
+	    createContainer
+	    composer install
+	    composer dump-autoload
+	    exit 0
+	;;
+	"init:container")
+		createContainer
+		exit 0
+	;;
+	"composer")
+		composer ${@:2}
+		exit 0
+	;;
+	"test")
+		unitTest
+		exit 0
+	;;
+	"lint")
+		lint
+		exit 0
+	;;
+	"clean")
+	    removeContainer
+	    exit 0
+	;;
+	"clean:all")
+		removeContainerAndImage
+		exit 0
+	;;
+    *)
+        if [ $# -eq 1 ]
+        then
+            $0 | grep $1
+        else
+            usage
+        fi
+    ;;
+esac
