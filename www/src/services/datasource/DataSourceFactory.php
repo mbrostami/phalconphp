@@ -23,8 +23,7 @@ class DataSourceFactory
      */
     public function createDataSourceAdapter($adapter, $configs = [])
     {
-        switch ($adapter)
-        {
+        switch ($adapter) {
             case self::TYPE_JSON:
                 return new Json($configs);
             case self::TYPE_CSV:
